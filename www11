@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="widtd=device-widtd, initial-scale=1, maximum-scale=1, user-scalable=0">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<title>工资计算器</title>
+</head>
+
+<body>
+
+<div >
+<br><br>
+<div style="width: 400px ;margin-left: 100px" >
+
+基本工资：<input type="text" value="4000" name="jiben" id="jiben"><br>
+外包工资：<input type="text" value="5000" name="wai" id="wai"><br>
+加班天数：<input type="text" placeholder="3" name="jia" id="jia"><br>
+<a onclick="save();">提交</a>
+<br><br>
+<table border="1" bordercolor="#a0c6e5" style="border-collapse:collapse;text-align: center;">
+<tr><th width="100px">项目</th><th width="100px">个人比例</th><th width="100px">单位比例</th></tr>
+<tr><td>养老</td><td id="yanglao_l">0</td><td id="yanglao_g">0</td></tr>
+<tr><td>医疗</td><td id="yilaio_l">0</td><td id="yiliao_g">0</td></tr>
+<tr><td>失业</td><td id="shiye_l">0</td><td id="shiye_g">0</td></tr>
+<tr><td>工伤</td><td id="gongshang_l">0</td><td id="gongshang_g">0</td></tr>
+<tr><td>生育</td><td id="shengyu_l">0</td><td id="shengyu_g">0</td></tr>
+<tr><td>公积金</td><td id="gongjijin_l">0</td><td id="gongjijin_g">0</td></tr>
+</table>
+<br>
+<table border="1" bordercolor="#a0c6e5" style="border-collapse:collapse;text-align: center;">
+<tr><th width="100px">项目</th><th width="100px">税款</th><th width="100px">税后</th></tr>
+<tr><td>基本工资</td><td id="jishui">0</td><td id="jishui_h">0</td></tr>
+<tr><td>外包工资</td><td id="waishui">0</td><td id="waishui_h">0</td></tr>
+<tr><td>加班工资</td><td id="jiashui">0</td><td id="jiashui_h">0</td></tr>
+</table>
+<br/>
+<div id="zong"></div>
+<div id="shi"></div>
+<div id="gongsi"></div>
+</div>
+</div>
+
+<script>
+function save() {
+	var jiben = document.getElementById('jiben').value*1;
+	var jia = document.getElementById('jia').value*413.7931;
+	var wai = document.getElementById('wai').value*1;
+	
+	var yanglao_l = (Math.round(parseFloat(jiben)*8)/100).toFixed(2);
+	var yanglao_g = (Math.round(parseFloat(jiben)*19)/100).toFixed(2);
+
+	var yilaio_l = (Math.round(parseFloat(jiben)*2)/100+3).toFixed(2);
+	var yiliao_g = (Math.round(parseFloat(jiben)*10)/100).toFixed(2);
+
+	var shiye_l = (Math.round(parseFloat(jiben)*0.2)/100).toFixed(2);
+	var shiye_g = (Math.round(parseFloat(jiben)*0.8)/100).toFixed(2);
+
+	var gongshang_l = (Math.round(parseFloat(jiben)*0)/100).toFixed(2);
+	var gongshang_g = (Math.round(parseFloat(jiben)*0.3)/100).toFixed(2);
+
+	var shengyu_l = (Math.round(parseFloat(jiben)*0)/100).toFixed(2);
+	var shengyu_g = (Math.round(parseFloat(jiben)*0.8)/100).toFixed(2);
+
+	var gongjijin_l = (Math.round(parseFloat(jiben)*12/100)).toFixed(2);
+	var gongjijin_g = (Math.round(parseFloat(jiben)*12/100)).toFixed(2);
+
+	var kouwuyi = jiben - yanglao_l - yilaio_l - gongjijin_l;
+	var jishui = 0;
+	if(kouwuyi <= 5000 && kouwuyi>3500){
+		jishui = (Math.round(parseFloat(kouwuyi - 3500)*3)/100).toFixed(2);
+	}else if(kouwuyi >5000 && kouwuyi <= 8000){
+		jishui = (Math.round(parseFloat(kouwuyi - 5000)*3)/100 + 150).toFixed(2);
+	}
+	var jishui_h = (kouwuyi - jishui).toFixed(2);
+
+	var waishui = 0;
+	if((wai)<=5000){
+		waishui = (Math.round(parseFloat(wai - 3500)*3)/100).toFixed(2);
+	}else if(wai<= 8000){
+		waishui = (Math.round(parseFloat(wai - 5000)*10)/100 + 45).toFixed(2);
+	}
+	var waishui_h = (wai - waishui).toFixed(2);
+
+	var jiashui = 0;
+	if((jia + wai)<=5000){
+		jiashui = (Math.round(parseFloat(jia + wai - 3500)*3)/100 - waishui).toFixed(2);
+	}else if((jia + wai) >5000 && (jia + wai) <= 8000){
+		jiashui = (Math.round(parseFloat(jia + wai - 5000)*10)/100 + 45 - waishui).toFixed(2);
+	}
+	var jiashui_h = (jia - jiashui).toFixed(2);
+
+	var zong = (parseFloat(jishui_h) + parseFloat(jiashui_h) + parseFloat(waishui_h)).toFixed(2);
+
+	var shi = (parseFloat(jiben) + parseFloat(jia) + parseFloat(wai)).toFixed(2);
+	
+	var waizong = (parseFloat(jiashui_h) + parseFloat(waishui_h)).toFixed(2);
+
+	var gongsi = (parseFloat(jiben*1.429) + parseFloat(jia) + parseFloat(wai)).toFixed(2);
+
+	document.getElementById('yanglao_l').innerHTML=yanglao_l; 
+	document.getElementById('yanglao_g').innerHTML=yanglao_g; 
+
+	document.getElementById('yilaio_l').innerHTML=yilaio_l; 
+	document.getElementById('yiliao_g').innerHTML=yiliao_g; 
+
+	document.getElementById('shiye_l').innerHTML=shiye_l; 
+	document.getElementById('shiye_g').innerHTML=shiye_g; 
+
+	document.getElementById('gongshang_g').innerHTML=gongshang_g; 
+	document.getElementById('shengyu_g').innerHTML=shengyu_g; 
+
+	document.getElementById('gongjijin_l').innerHTML=gongjijin_l; 
+	document.getElementById('gongjijin_g').innerHTML=gongjijin_g; 
+
+	
+	document.getElementById('jishui').innerHTML=jishui;
+	document.getElementById('jishui_h').innerHTML=jishui_h;
+	
+	document.getElementById('waishui').innerHTML=waishui;
+	document.getElementById('waishui_h').innerHTML=waishui_h;
+
+	document.getElementById('jiashui').innerHTML=jiashui;
+	document.getElementById('jiashui_h').innerHTML=jiashui_h;
+
+	document.getElementById('shi').innerHTML="实发工资:"+shi;
+	document.getElementById('zong').innerHTML="应发工资:"+zong+"="+waizong+"+"+jishui_h;
+	document.getElementById('gongsi').innerHTML="公司支出:"+gongsi;
+
+
+	//var type = $("#maitianTypes").val();
+	//alert(Math.round(parseFloat(jian + kouwuyi + jiang - 3500)*3)/100);
+}
+</script>
+</body>
+</html>
