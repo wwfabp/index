@@ -1,0 +1,53 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="widtd=device-widtd, initial-scale=1, maximum-scale=1, user-scalable=0">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<title>图片下载</title>
+<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+</head>
+
+<body>
+<a  href="javascript:;" onclick="searchtup(0);">tupian</a><br>
+ <div class="cont"> 1111</div>
+
+ <script type="text/javascript">
+	function searchtup(skip){
+		var skips= skip+500;
+	$.ajax({
+		type : "get",
+		url : "http://service.androidesk.com/img/list?skip=2500&limit=1000",
+		timeout : 30000,
+		data : {
+			
+
+		},
+		dataType : "json",
+		async: false,
+		success: function(data) { 
+			
+				var shtml =" <div class=\"cont\">";
+				for (var i = 0; i < data.resp.images.length; i++) {
+					if(data.resp.images[i].fobjs._160x120)
+					
+					shtml +="<a href=\"http://img4.androidesk.com/wallpaper?imgid="+data.resp.images[i]._id+"&reso=1600x1280\"><img src=\"http://img4.androidesk.com/download/"+data.resp.images[i].fobjs._160x120+"\" width=\"320\" height=\"256\"></a>";
+				}
+				shtml +="<a href=\"javascript:;\" onclick=\"searchtup("+skips+");\"><br><br>下一页</a><br><br><br><br><br></div>";
+			
+				$('.cont').replaceWith(shtml);
+			
+		},
+
+	});
+	
+
+
+
+}
+</script>
+</body>
+</html>
